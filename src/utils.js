@@ -12,6 +12,7 @@ import { homedir } from 'os';
  * Prioritizes the standard location (~/AjaxSpeaks 1.0).
  */
 export function getAjaxSpeaksHome() {
+  if (process.env.AJAXSPEAKS_HOME) return process.env.AJAXSPEAKS_HOME;
   const home = homedir();
   const v1Path = join(home, 'AjaxSpeaks 1.0');
   if (existsSync(v1Path)) return v1Path;
