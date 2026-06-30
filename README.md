@@ -44,7 +44,18 @@ Every character earns its place.
 - **Node.js ≥ 14** installed and on your system PATH
 - Verify with: `node --version`
 
-### Linux
+### npm (Recommended — Linux, macOS, Windows)
+
+```bash
+npm install -g ajaxspeaks
+```
+
+That's it. All 8 commands are immediately available in any terminal.
+
+### Manual Install (no npm)
+
+<details>
+<summary>Linux / macOS</summary>
 
 ```bash
 bash ~/AjaxSpeaks\ 1.0/install-ajaxspeaks.sh
@@ -56,29 +67,20 @@ The installer will:
 3. Optionally save AjaxSpeaks commands as a persistent AI tool rule
 4. Add `~/.local/bin` to your PATH if needed (may require relogin)
 
-### macOS
+macOS double-click: `install-ajaxspeaks.command` in Finder.
 
-**Option 1 — Terminal:**
-```bash
-bash ~/AjaxSpeaks\ 1.0/install-ajaxspeaks.sh
-```
+</details>
 
-**Option 2 — Double-click:**
-Double-click `install-ajaxspeaks.command` in Finder.
-If you get an "unidentified developer" warning, see Troubleshooting below.
+<details>
+<summary>Windows</summary>
 
-### Windows
-
-**Option 1 — Command Prompt (recommended):**
 ```cmd
 AjaxSpeaks 1.0\install-ajaxspeaks.bat
 ```
 
-**Option 2 — Double-click:**
-Double-click `install-ajaxspeaks.bat` in File Explorer.
+Or double-click `install-ajaxspeaks.bat` in File Explorer.
 
-The installer creates `.bat` wrapper scripts in a directory added to your
-system PATH, making commands available from any terminal.
+</details>
 
 ---
 
