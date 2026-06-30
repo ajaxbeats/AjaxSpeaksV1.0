@@ -1,4 +1,5 @@
 
+```text
 █████╗      ██╗ █████╗ ██╗  ██╗
 ██╔══██╗     ██║██╔══██╗╚██╗██╔╝
 ███████║     ██║███████║ ╚███╔╝ 
@@ -18,6 +19,7 @@
 │    96% compression · Structured shorthand · One command          │
 │                   Created by AjaxBeats                           │
 └───────────────────────────────────────────────────────────────────┘
+```
 
 
 Never repeat project context to your AI assistant again. AjaxSpeaks
