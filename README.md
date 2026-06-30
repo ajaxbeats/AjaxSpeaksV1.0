@@ -119,7 +119,7 @@ Short, punchy, natural to say:
 | Say This | Runs | Description |
 |---|---|---|
 | `ajaxreads` | `_AJAXREADS` | Scan project, build `.mem` |
-| `ajaploads` | `_AJAXLOADS` | Load `.mem` into AI tool |
+| `ajaxloads` | `_AJAXLOADS` | Load `.mem` into AI tool |
 | `ajaxlogs` | `_AJAXLOGS` | Log a session entry |
 | `ajaxforgets` | `_AJAXFORGETS` | Wipe the `.mem` file |
 | `ajaxhide` | `_AJAXHIDE` | Scan for secrets |

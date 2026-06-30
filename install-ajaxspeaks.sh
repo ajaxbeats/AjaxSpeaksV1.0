@@ -102,7 +102,7 @@ fi
 # Option 1: "ajax" prefix — shorter, natural to type/say
 ALIAS_OPT1='# AjaxSpeaks voice-friendly aliases (Option 1 - ajax prefix)
 alias ajaxreads="_AJAXREADS"
-alias ajaploads="_AJAXLOADS"
+alias ajaxloads="_AJAXLOADS"
 alias ajaxlogs="_AJAXLOGS"
 alias ajaxforgets="_AJAXFORGETS"
 alias ajaxhide="_AJAXHIDE"
@@ -130,7 +130,7 @@ if [ -n "$SHELL_CONFIG" ]; then
     echo "$ALIAS_OPT2" >> "$SHELL_CONFIG"
     echo "" >> "$SHELL_CONFIG"
     echo "  ✓ Added voice-friendly aliases to $SHELL_CONFIG"
-    echo "    Option 1: ajaxreads, ajaploads, ajaxlogs, ajaxforgets, ajaxhide, ajaxseek, ajaxrule, ajaxbeats"
+    echo "    Option 1: ajaxreads, ajaxloads, ajaxlogs, ajaxforgets, ajaxhide, ajaxseek, ajaxrule, ajaxbeats"
     echo "    Option 2: readmem, loadmem, logmem, wipemem, scanmem, fillmem, rulemem, playlist"
   fi
 fi
