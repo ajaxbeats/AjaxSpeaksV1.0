@@ -1,0 +1,46 @@
+{
+  "name": "ajaxspeaks",
+  "version": "1.0.0",
+  "description": "96% token compression for AI tools. Distills your project into .mem files — works with Claude, Cline, Cursor, Copilot, Continue.",
+  "type": "module",
+  "bin": {
+    "_AJAXREADS": "./src/_AJAXREADS.js",
+    "_AJAXLOADS": "./src/_AJAXLOADS.js",
+    "_AJAXLOGS": "./src/_AJAXLOGS.js",
+    "_AJAXFORGETS": "./src/_AJAXFORGETS.js",
+    "_AJAXHIDE": "./src/_AJAXHIDE.js",
+    "_AJAXSEEK": "./src/_AJAXSEEK.js",
+    "_AJAXRULE": "./src/_AJAXRULE.js",
+    "_AJAXBEATS": "./src/_AJAXBEATS.js"
+  },
+  "files": [
+    "src/",
+    "rules/",
+    "README.md",
+    "demo.gif"
+  ],
+  "keywords": [
+    "ai",
+    "context-compression",
+    "llm",
+    "claude",
+    "cline",
+    "cursor",
+    "copilot",
+    "memory",
+    "token-optimization",
+    "developer-tools",
+    "cli",
+    "prompt-engineering"
+  ],
+  "author": "ajaxbeats",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajaxbeats/AjaxSpeaksV1.0.git"
+  },
+  "homepage": "https://github.com/ajaxbeats/AjaxSpeaksV1.0#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
