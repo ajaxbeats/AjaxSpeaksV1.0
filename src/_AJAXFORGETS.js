@@ -12,6 +12,11 @@ import { writeFileSync, existsSync } from 'fs';
 import { resolve, basename } from 'path';
 import { findMemFile } from './utils.js';
 
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', green: '\x1b[32m',
+  cyan: '\x1b[36m', red: '\x1b[31m', dim: '\x1b[2m',
+};
+
 function usage() {
   console.log(`\n_AJAXFORGETS — Wipe .mem file\n`);
   console.log(`  _AJAXFORGETS              Wipe current project's .mem`);
@@ -28,7 +33,7 @@ function main() {
   const memPath = fIdx !== -1 ? resolve(args[fIdx + 1]) : findMemFile(rootDir);
 
   if (!memPath || !existsSync(memPath)) {
-    console.error('Error: No .mem file found.');
+    console.error(`${C.red}✗ Error: No .mem file found.${C.reset}`);
     process.exit(1);
   }
 
@@ -42,7 +47,7 @@ function main() {
   // Write minimal template
   const template = `# AjaxSpeaks — Project Memory\n# Wiped by _AJAXFORGETS on ${new Date().toISOString().slice(0, 10)}\n\n!meta\n  name = ${basename(rootDir)}\n`;
   writeFileSync(memPath, template, 'utf-8');
-  console.log(`\nForgotten. ${memPath}\n`);
+  console.log(`\n${C.green}${C.bold}✓ Forgotten.${C.reset} ${C.dim}${memPath}${C.reset}\n`);
 }
 
 main();

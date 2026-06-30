@@ -22,6 +22,16 @@ import { load, listTargets } from './loader.js';
 import { estimateTokensVerbose } from './grammar.js';
 import { findMemFile, getAjaxSpeaksHome, getCurrentProjectName } from './utils.js';
 
+const C = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  green: '\x1b[32m',
+  cyan: '\x1b[36m',
+  yellow: '\x1b[33m',
+  red: '\x1b[31m',
+  dim: '\x1b[2m',
+};
+
 const AI_DETECTION = [
   { files: ['.clinerules'], env: 'CLINE_CONFIG', target: 'cline' },
   { files: ['.cursorrules', '.cursor'], env: null, target: 'cursor' },
@@ -50,7 +60,7 @@ function detectAITool(dir) {
 }
 
 function usage() {
-  console.log(`\n_AJAXLOADS — Load .mem with archive support\n`);
+  console.log(`\n${C.bold}${C.cyan}_AJAXLOADS${C.reset} — Load .mem with archive support\n`);
   console.log(`  _AJAXLOADS                      Load active memory`);
   console.log(`  _AJAXLOADS --archive            Include archived sessions`);
   console.log(`  _AJAXLOADS --to TARGET          Format for AI tool`);
@@ -59,7 +69,7 @@ function usage() {
   console.log(`  _AJAXLOADS --dry-run            Print only (no write)`);
   console.log(`  _AJAXLOADS --stats              Show token counts`);
   console.log(`  _AJAXLOADS --list               List AI tool targets`);
-  console.log(`\nTargets: ${listTargets().join(', ')}\n`);
+  console.log(`\n${C.dim}Targets: ${listTargets().join(', ')}${C.reset}\n`);
 }
 
 function countDateHeaders(source) {
@@ -84,7 +94,7 @@ async function main() {
   const memPath = fIdx !== -1 ? resolve(args[fIdx + 1]) : findMemFile(rootDir);
 
   if (!memPath || !existsSync(memPath)) {
-    console.error('Error: No .mem file found. Run _AJAXREADS first.');
+    console.error(`${C.red}✗ Error: No .mem file found. Run _AJAXREADS first.${C.reset}`);
     process.exit(1);
   }
 
@@ -96,7 +106,7 @@ async function main() {
 
   const validTargets = listTargets();
   if (!validTargets.includes(target)) {
-    console.error(`Error: Unknown target "${target}". Available: ${validTargets.join(', ')}`);
+    console.error(`${C.red}✗ Error: Unknown target "${target}". Available: ${validTargets.join(', ')}${C.reset}`);
     process.exit(1);
   }
 
@@ -132,10 +142,9 @@ async function main() {
   if (outputPath && !isDryRun) {
     writeFileSync(outputPath, output, 'utf-8');
     const tokens = estimateTokensVerbose(output);
-    console.log(`\nAjaxSpeaks loaded.`);
-    console.log(`Context → ${outputPath}`);
-    console.log(`~${tokens} tokens (target: ${target})`);
-    if (includeArchive) console.log('(includes archived sessions)');
+    console.log(`\n${C.green}${C.bold}✓ AjaxSpeaks loaded${C.reset} ${C.dim}(${target})${C.reset}`);
+    console.log(`${C.cyan}  Context → ${C.reset}${outputPath}`);
+    console.log(`${C.dim}  ~${tokens} tokens${includeArchive ? ' · includes archived sessions' : ''}${C.reset}\n`);
   } else {
     console.log(output);
     if (outputPath && isDryRun) {

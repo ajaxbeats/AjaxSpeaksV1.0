@@ -22,6 +22,11 @@ import { createInterface } from 'readline';
 import { stdin as processStdin, stdout as processStdout } from 'process';
 import { findMemFile } from './utils.js';
 
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', green: '\x1b[32m',
+  cyan: '\x1b[36m', yellow: '\x1b[33m', red: '\x1b[31m', dim: '\x1b[2m',
+};
+
 const PLACEHOLDER_REGEX = /\{\{([A-Z_][A-Z0-9_]*)(?::([^}]*))?\}\}/g;
 
 function usage() {
@@ -99,26 +104,24 @@ async function main() {
   const placeholders = findPlaceholders(content);
 
   if (placeholders.length === 0) {
-    console.log('\n  ✅ No placeholders found in .mem\n');
+    console.log(`\n  ${C.green}${C.bold}✓ No placeholders found in .mem${C.reset}\n`);
     process.exit(0);
   }
 
-  // --dry-run: list placeholders
   if (args.includes('--dry-run')) {
-    console.log(`\nPlaceholders in ${memPath}:\n`);
+    console.log(`\n${C.bold}Placeholders in${C.reset} ${C.dim}${memPath}${C.reset}:\n`);
     for (const p of placeholders) {
-      const def = p.default ? ` (default: "${p.default}")` : '';
-      console.log(`  {{${p.key}}}${def} — ${p.count} occurrence(s)`);
+      const def = p.default ? ` ${C.dim}(default: "${p.default}")${C.reset}` : '';
+      console.log(`  ${C.cyan}{{${p.key}}}${C.reset}${def} — ${p.count} occurrence(s)`);
     }
     console.log('');
     process.exit(0);
   }
 
-  // --clear: replace all placeholders with empty string
   if (args.includes('--clear')) {
     const cleared = content.replace(PLACEHOLDER_REGEX, '');
     writeFileSync(memPath, cleared, 'utf-8');
-    console.log(`\n  ✅ Cleared ${placeholders.length} placeholder(s)\n`);
+    console.log(`\n  ${C.green}${C.bold}✓ Cleared ${placeholders.length} placeholder(s)${C.reset}\n`);
     process.exit(0);
   }
 
@@ -144,23 +147,22 @@ async function main() {
 
     const replaced = replacePlaceholders(content, values);
     writeFileSync(memPath, replaced, 'utf-8');
-    console.log(`\n  ✅ Set ${values.size} placeholder(s)\n`);
+    console.log(`\n  ${C.green}${C.bold}✓ Set ${values.size} placeholder(s)${C.reset}\n`);
     process.exit(0);
   }
 
-  // Interactive mode
-  console.log(`\nFilling placeholders in ${memPath}:\n`);
+  console.log(`\n${C.bold}Filling placeholders in${C.reset} ${C.dim}${memPath}${C.reset}:\n`);
   const values = new Map();
   for (const p of placeholders) {
     const def = p.default || '';
-    const hint = def ? ` [${def}]` : '';
-    const answer = await prompt(`  {{${p.key}}}${hint}: `);
+    const hint = def ? ` ${C.dim}[${def}]${C.reset}` : '';
+    const answer = await prompt(`  ${C.cyan}{{${p.key}}}${C.reset}${hint}: `);
     values.set(p.key, answer || def);
   }
 
   const replaced = replacePlaceholders(content, values);
   writeFileSync(memPath, replaced, 'utf-8');
-  console.log(`\n  ✅ Filled ${values.size} placeholder(s)\n`);
+  console.log(`\n  ${C.green}${C.bold}✓ Filled ${values.size} placeholder(s)${C.reset}\n`);
 }
 
 main().catch(err => { console.error(`Error: ${err.message}`); process.exit(1); });

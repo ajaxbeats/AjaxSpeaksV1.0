@@ -15,14 +15,14 @@
  */
 
 import {
-  saveRule,
-  unsaveRule,
-  saveAllRules,
-  unsaveAllRules,
-  checkRuleStatus,
-  backupAll,
-  SUPPORTED_TOOLS,
+  saveRule, unsaveRule, saveAllRules, unsaveAllRules,
+  checkRuleStatus, backupAll, SUPPORTED_TOOLS,
 } from './rules.js';
+
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', green: '\x1b[32m',
+  cyan: '\x1b[36m', red: '\x1b[31m', dim: '\x1b[2m',
+};
 
 const TOOLS_LIST = SUPPORTED_TOOLS.join(', ');
 
@@ -41,9 +41,9 @@ function usage() {
 function printResults(results) {
   for (const r of results) {
     if (r.success) {
-      console.log(`  ✓ ${r.message}`);
+      console.log(`  ${C.green}✓${C.reset} ${r.message}`);
     } else {
-      console.log(`  ✗ ${r.error || r.message}`);
+      console.log(`  ${C.red}✗${C.reset} ${r.error || r.message}`);
     }
   }
 }
@@ -64,42 +64,39 @@ function main() {
     process.exit(0);
   }
 
-  // --status: check which tools have rules installed
   if (args.includes('--status')) {
-    console.log('\nAjaxSpeaks Rule Status:\n');
+    console.log(`\n${C.bold}AjaxSpeaks Rule Status:${C.reset}\n`);
     const statuses = checkRuleStatus();
     for (const s of statuses) {
-      const icon = s.installed ? '✓' : ' ';
-      console.log(`  ${icon} ${s.label.padEnd(20)} ${s.installed ? 'installed' : 'not installed'}`);
-      console.log(`     ${s.path}`);
+      const icon = s.installed ? `${C.green}✓${C.reset}` : `${C.dim} ${C.reset}`;
+      const state = s.installed ? `${C.green}installed${C.reset}` : `${C.dim}not installed${C.reset}`;
+      console.log(`  ${icon} ${s.label.padEnd(20)} ${state}`);
+      console.log(`     ${C.dim}${s.path}${C.reset}`);
     }
     console.log('');
     process.exit(0);
   }
 
-  // --backup: backup all projects and rules
   if (args.includes('--backup')) {
-    console.log('\nBacking up AjaxSpeaks data...\n');
+    console.log(`\n${C.bold}Backing up AjaxSpeaks data...${C.reset}\n`);
     const { backupDir, manifest } = backupAll();
-    console.log(`  ✓ Backup created: ${backupDir}`);
-    console.log(`  ✓ Projects backed up: ${manifest.projects.length}`);
-    console.log(`  ✓ AI tool configs snapshotted: ${manifest.aiToolConfigs.length}`);
+    console.log(`  ${C.green}✓${C.reset} Backup created: ${C.dim}${backupDir}${C.reset}`);
+    console.log(`  ${C.green}✓${C.reset} Projects backed up: ${manifest.projects.length}`);
+    console.log(`  ${C.green}✓${C.reset} AI tool configs snapshotted: ${manifest.aiToolConfigs.length}`);
     console.log('');
     process.exit(0);
   }
 
-  // Determine target
   const toIdx = args.indexOf('--to');
   const target = toIdx !== -1 && args[toIdx + 1] ? args[toIdx + 1] : null;
 
   if (target && !SUPPORTED_TOOLS.includes(target)) {
-    console.error(`Error: Unknown target "${target}". Available: ${TOOLS_LIST}`);
+    console.error(`${C.red}✗ Error: Unknown target "${target}". Available: ${TOOLS_LIST}${C.reset}`);
     process.exit(1);
   }
 
-  // --save
   if (args.includes('--save')) {
-    console.log(`\nSaving AjaxSpeaks rule...\n`);
+    console.log(`\n${C.bold}Saving AjaxSpeaks rule...${C.reset}\n`);
     const results = target ? [saveRule(target)] : saveAllRules();
     printResults(results);
     console.log('');
@@ -108,15 +105,14 @@ function main() {
 
   // --unsave
   if (args.includes('--unsave')) {
-    console.log(`\nRemoving AjaxSpeaks rule...\n`);
+    console.log(`\n${C.bold}Removing AjaxSpeaks rule...${C.reset}\n`);
     const results = target ? [unsaveRule(target)] : unsaveAllRules();
     printResults(results);
     console.log('');
     process.exit(0);
   }
 
-  // Unknown flags
-  console.error(`Error: Unknown flags. Use --help for usage.`);
+  console.error(`${C.red}✗ Error: Unknown flags. Use --help for usage.${C.reset}`);
   process.exit(1);
 }
 

@@ -12,6 +12,11 @@
 
 import { execSync } from 'child_process';
 
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', green: '\x1b[32m',
+  cyan: '\x1b[36m', dim: '\x1b[2m',
+};
+
 const PLAYLIST_URL = 'https://open.spotify.com/playlist/7GyDdZ05PQG8lf5nOZOWbI?si=26b565e3ab72411c';
 
 function usage() {
@@ -33,14 +38,14 @@ function main() {
   if (args.includes('--copy')) {
     try {
       execSync(`echo "${PLAYLIST_URL}" | xclip -selection clipboard`, { stdio: 'pipe' });
-      console.log('  ✓ URL copied to clipboard');
+      console.log(`  ${C.green}✓ URL copied to clipboard${C.reset}`);
     } catch {
       try {
         execSync(`echo "${PLAYLIST_URL}" | pbcopy`, { stdio: 'pipe' });
-        console.log('  ✓ URL copied to clipboard');
+        console.log(`  ${C.green}✓ URL copied to clipboard${C.reset}`);
       } catch {
         console.log(PLAYLIST_URL);
-        console.log('  (clipboard not available, printed URL above)');
+        console.log(`  ${C.dim}(clipboard not available, printed URL above)${C.reset}`);
       }
     }
     process.exit(0);
@@ -57,10 +62,10 @@ function main() {
       // Linux
       execSync(`xdg-open "${PLAYLIST_URL}"`, { stdio: 'pipe' });
     }
-    console.log('  ✓ Opened AjaxBeats playlist in browser');
+    console.log(`\n${C.green}${C.bold}✓ Opened AjaxBeats playlist${C.reset} ${C.dim}in browser${C.reset}\n`);
   } catch {
-    console.log(PLAYLIST_URL);
-    console.log('  (could not open browser, printed URL above)');
+    console.log(`\n${C.cyan}${PLAYLIST_URL}${C.reset}`);
+    console.log(`${C.dim}  (could not open browser, printed URL above)${C.reset}\n`);
   }
 }
 

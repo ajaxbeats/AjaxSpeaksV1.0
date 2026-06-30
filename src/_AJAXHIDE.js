@@ -19,6 +19,11 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { findMemFile } from './utils.js';
 
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', green: '\x1b[32m',
+  cyan: '\x1b[36m', yellow: '\x1b[33m', red: '\x1b[31m', dim: '\x1b[2m',
+};
+
 // ─── Secret Patterns ──────────────────────────────────────────────────────────
 // Each pattern has: regex, severity, label, replacement hint
 
@@ -176,7 +181,7 @@ function main() {
   const memPath = fIdx !== -1 ? resolve(args[fIdx + 1]) : findMemFile(rootDir);
 
   if (!memPath || !existsSync(memPath)) {
-    console.error('Error: No .mem file found.');
+    console.error(`${C.red}✗ Error: No .mem file found.${C.reset}`);
     process.exit(1);
   }
 
@@ -187,65 +192,49 @@ function main() {
 
   const findings = scan(content);
 
-  // Group by severity
   const critical = findings.filter(f => f.severity === 'critical');
   const high = findings.filter(f => f.severity === 'high');
   const medium = findings.filter(f => f.severity === 'medium');
 
   if (isQuiet) {
     console.log(JSON.stringify({
-      file: memPath,
-      total: findings.length,
-      critical: critical.length,
-      high: high.length,
-      medium: medium.length,
-      findings: findings.map(f => ({
-        name: f.name,
-        severity: f.severity,
-        value: f.value.slice(0, 20) + '...',
-        index: f.index,
-      })),
+      file: memPath, total: findings.length,
+      critical: critical.length, high: high.length, medium: medium.length,
+      findings: findings.map(f => ({ name: f.name, severity: f.severity, value: f.value.slice(0, 20) + '...', index: f.index })),
     }, null, 2));
     process.exit(0);
   }
 
-  console.log(`\nScanning: ${memPath}\n`);
+  console.log(`\n${C.bold}Scanning:${C.reset} ${C.dim}${memPath}${C.reset}\n`);
 
   if (findings.length === 0) {
-    console.log('  ✅ No secrets found — safe to share!\n');
+    console.log(`  ${C.green}${C.bold}✓ No secrets found — safe to share!${C.reset}\n`);
     process.exit(0);
   }
 
-  // Print summary
-  console.log(`  Found ${findings.length} potential secret(s):\n`);
+  console.log(`  ${C.red}${C.bold}Found ${findings.length} potential secret(s):${C.reset}\n`);
   for (const f of findings) {
-    const truncated = f.value.length > 40
-      ? f.value.slice(0, 20) + '...' + f.value.slice(-10)
-      : f.value;
-    console.log(`  ${f.icon} [${f.severity.toUpperCase()}] ${f.name}`);
-    console.log(`     ${truncated}`);
+    const truncated = f.value.length > 40 ? f.value.slice(0, 20) + '...' + f.value.slice(-10) : f.value;
+    console.log(`  ${f.icon} ${C.bold}[${f.severity.toUpperCase()}]${C.reset} ${f.name}`);
+    console.log(`     ${C.dim}${truncated}${C.reset}`);
   }
 
-  console.log(`\n  Summary: ${critical.length} critical, ${high.length} high, ${medium.length} medium\n`);
+  console.log(`\n  ${C.dim}Summary: ${critical.length} critical, ${high.length} high, ${medium.length} medium${C.reset}\n`);
 
-  // Fix or dry-run
   if (isFix || isDryRun) {
     const { redacted, count } = redact(content);
-
     if (isDryRun) {
-      console.log(`--- DRY RUN: Would redact ${count} secrets ---`);
+      console.log(`${C.yellow}--- DRY RUN: Would redact ${count} secrets ---${C.reset}`);
       console.log(redacted);
-      console.log(`--- END DRY RUN ---\n`);
+      console.log(`${C.yellow}--- END DRY RUN ---${C.reset}\n`);
       process.exit(0);
     }
-
     writeFileSync(memPath, redacted, 'utf-8');
-    console.log(`  ✅ Redacted ${count} secret(s) in ${memPath}\n`);
+    console.log(`  ${C.green}${C.bold}✓ Redacted ${count} secret(s)${C.reset} ${C.dim}in ${memPath}${C.reset}\n`);
     process.exit(0);
   }
 
-  // If secrets found and no --fix, suggest it
-  console.log('  💡 Run with --fix to redact these secrets\n');
+  console.log(`  ${C.cyan}💡 Run with --fix to redact these secrets${C.reset}\n`);
 }
 
 main();

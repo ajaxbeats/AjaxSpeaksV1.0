@@ -19,6 +19,11 @@ import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'fs';
 import { resolve, join, basename } from 'path';
 import { findMemFile, getProjectDir, getCurrentProjectName } from './utils.js';
 
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', green: '\x1b[32m',
+  cyan: '\x1b[36m', yellow: '\x1b[33m', red: '\x1b[31m', dim: '\x1b[2m',
+};
+
 const MAX_ACTIVE_SESSIONS = 3;
 
 function today() {
@@ -106,7 +111,7 @@ function archiveOldestSession(memPath) {
   const cleaned = remaining.join('\n').trimEnd() + '\n';
   writeFileSync(memPath, cleaned, 'utf-8');
 
-  console.log(`Archived: ${firstDateLine.trim()} → ${basename(archivePath)}`);
+  console.log(`${C.yellow}  ↳ Archived: ${firstDateLine.trim()} → ${basename(archivePath)}${C.reset}`);
 }
 
 function main() {
@@ -206,8 +211,8 @@ function main() {
     lines.splice(insertAt, 0, ...newLines);
     source = lines.join('\n');
     writeFileSync(memPath, source, 'utf-8');
-    console.log(`Logged to ${basename(memPath)}: !mem ${dateStr}`);
-    console.log(`  ${entryText}`);
+    console.log(`\n${C.green}${C.bold}✓ Logged${C.reset} ${C.dim}→ ${basename(memPath)}${C.reset}`);
+    console.log(`${C.cyan}  !mem ${dateStr}${C.reset}  ${entryText}\n`);
     process.exit(0);
   }
 
@@ -234,8 +239,8 @@ function main() {
     lines.splice(insertAt, 0, newLine);
     source = lines.join('\n');
     writeFileSync(memPath, source, 'utf-8');
-    console.log(`Logged to ${basename(memPath)}: !mem ${dateStr}`);
-    console.log(`  ${entryText}`);
+    console.log(`\n${C.green}${C.bold}✓ Logged${C.reset} ${C.dim}→ ${basename(memPath)}${C.reset}`);
+    console.log(`${C.cyan}  !mem ${dateStr}${C.reset}  ${entryText}\n`);
   } else {
     let insertAt = memEnd + 1;
     while (insertAt < lines.length && lines[insertAt].trim() === '') insertAt++;
@@ -243,8 +248,8 @@ function main() {
     lines.splice(insertAt, 0, ...newLines);
     source = lines.join('\n');
     writeFileSync(memPath, source, 'utf-8');
-    console.log(`Logged to ${basename(memPath)}: !mem ${dateStr}`);
-    console.log(`  ${entryText}`);
+    console.log(`\n${C.green}${C.bold}✓ Logged${C.reset} ${C.dim}→ ${basename(memPath)}${C.reset}`);
+    console.log(`${C.cyan}  !mem ${dateStr}${C.reset}  ${entryText}\n`);
   }
 
   // Check if we need to archive old sessions
