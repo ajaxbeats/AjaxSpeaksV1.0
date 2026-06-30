@@ -21,6 +21,7 @@
 └───────────────────────────────────────────────────────────────────┘
 ```
 
+![AjaxSpeaks Demo](demo.gif)
 
 Never repeat project context to your AI assistant again. AjaxSpeaks
 distills your project knowledge into lightweight `.mem` files and
