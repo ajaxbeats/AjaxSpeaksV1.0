@@ -4,6 +4,7 @@
  *
  * Usage:
  *   _AJAXREADS                      Build .mem for current project
+ *   _AJAXREADS --init               Create a blank .mem template (no overwrite)
  *   _AJAXREADS -o FILE.mem          Write to specific path
  *   _AJAXREADS --dry-run            Print to stdout
  */
@@ -24,6 +25,7 @@ const C = {
 function usage() {
   console.log(`\n${C.bold}${C.cyan}_AJAXREADS${C.reset} — Discover context and build .mem\n`);
   console.log(`  _AJAXREADS              Build .mem for current project`);
+  console.log(`  _AJAXREADS --init       Create a blank .mem template`);
   console.log(`  _AJAXREADS -o FILE.mem  Write to specific path`);
   console.log(`  _AJAXREADS --dry-run    Print to stdout\n`);
 }
@@ -31,6 +33,33 @@ function usage() {
 function main() {
   const args = process.argv.slice(2);
   if (args.includes('--help') || args.includes('-h')) { usage(); process.exit(0); }
+
+  if (args.includes('--init')) {
+    const projectName = getCurrentProjectName();
+    const projDir = getProjectDir(projectName);
+    const outputPath = join(projDir, `${projectName}.mem`);
+    if (existsSync(outputPath)) {
+      console.log(`\n${C.yellow}⚠ .mem already exists — not overwriting${C.reset}`);
+      console.log(`${C.dim}  ${outputPath}${C.reset}\n`);
+      process.exit(0);
+    }
+    const template = `!meta
+  name = ${projectName}
+  desc =
+
+!arch
+  src/ ::
+
+!rules
+  !!
+
+!mem
+`;
+    writeFileSync(outputPath, template, 'utf-8');
+    console.log(`\n${C.green}${C.bold}✓ Created .mem template${C.reset}`);
+    console.log(`${C.cyan}  ${outputPath}${C.reset}\n`);
+    process.exit(0);
+  }
 
   const rootDir = resolve('.');
   const projectName = getCurrentProjectName();

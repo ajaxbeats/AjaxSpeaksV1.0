@@ -23,6 +23,10 @@
 
 ![AjaxSpeaks Demo](demo.gif)
 
+[![npm version](https://img.shields.io/npm/v/ajaxspeaks)](https://www.npmjs.com/package/ajaxspeaks)
+[![npm downloads](https://img.shields.io/npm/dt/ajaxspeaks)](https://www.npmjs.com/package/ajaxspeaks)
+[![License](https://img.shields.io/npm/l/ajaxspeaks)](LICENSE)
+
 Never repeat project context to your AI assistant again. AjaxSpeaks
 distills your project knowledge into lightweight `.mem` files and
 loads them into any AI tool — Claude, Cline, Cursor, Copilot,
@@ -36,6 +40,23 @@ Every character earns its place.
 
 ---
 
+## 💰 Why AjaxSpeaks?
+
+| Approach | Tokens | Cost per query* |
+|---|---|---|
+| Paste 10 source files | ~70,000 | ~$0.35 |
+| AjaxSpeaks `.mem` | ~3,000 | ~$0.015 |
+
+\*Estimate based on Claude Sonnet pricing. **96% cheaper. More context window left for actual conversation.**
+
+No servers. No MCP. No agent required. Just a `.mem` file and a paste.
+
+### Why not alternatives?
+
+Most context tools require an MCP server, a running agent, or an internet connection.  
+AjaxSpeaks is a plain CLI — zero dependencies, works offline, outputs a text file you paste anywhere.
+
+---
 
 ## 📦 Quick Install
 
@@ -88,7 +109,7 @@ Or double-click `install-ajaxspeaks.bat` in File Explorer.
 
 | Command | Description |
 |---|---|
-| `_AJAXREADS` | Scan project for context files, build/update `.mem` |
+| `_AJAXREADS` | Scan project for context files, build/update `.mem` (`--init` to create a blank template) |
 | `_AJAXLOADS` | Load `.mem` into current AI tool session |
 | `_AJAXLOGS` | Log a session entry to `.mem` (auto-archives old sessions) |
 | `_AJAXFORGETS` | Wipe the `.mem` file to a minimal template |
@@ -324,6 +345,69 @@ _AJAXSEEK                       # Interactive mode
 _AJAXSEEK --set DB_HOST=localhost --set DB_PORT=5432
 _AJAXSEEK --dry-run             # List placeholders only
 ```
+
+---
+
+## 🤝 Sharing `.mem` Files
+
+`.mem` files are plain text — share them via Git, Slack, email, or any file transfer. The recipient runs one command to load the full project context into their AI tool.
+
+### Sender workflow
+
+**1. Mark environment-specific values as placeholders**
+
+In your `.mem`, replace values that differ per machine (API URLs, ports, credentials) with `{{KEY}}` markers:
+
+```
+!deps
+  db_host = {{DB_HOST:localhost}}
+  api_url = {{API_URL}}
+  api_key = {{API_KEY}}
+```
+
+**2. Scan for secrets before sending**
+
+```bash
+_AJAXHIDE           # Show what might be sensitive
+_AJAXHIDE --fix     # Redact in-place (replaces values with {{REDACTED}})
+```
+
+**3. Send the `.mem` file**
+
+```bash
+# Via Git (recommended — versioned context alongside your code)
+cp ~/AjaxSpeaks\ 1.0/projects/myapp/myapp.mem ./context.mem
+git add context.mem && git commit -m "add project context"
+
+# Or just send the file directly
+```
+
+### Recipient workflow
+
+**1. Drop the `.mem` into your AjaxSpeaks projects folder**
+
+```bash
+mkdir -p ~/AjaxSpeaks\ 1.0/projects/myapp
+cp context.mem ~/AjaxSpeaks\ 1.0/projects/myapp/myapp.mem
+cd /path/to/myapp
+```
+
+**2. Fill in your local values**
+
+```bash
+_AJAXSEEK                                        # Interactive prompt for each placeholder
+_AJAXSEEK --set DB_HOST=192.168.1.10 --set API_KEY=abc123  # Or set all at once
+_AJAXSEEK --dry-run                              # Preview what needs filling first
+```
+
+**3. Load into your AI tool**
+
+```bash
+_AJAXLOADS                      # Load into auto-detected tool
+_AJAXLOADS --to cursor          # Or target a specific tool
+```
+
+> **Tip:** Use `{{KEY:default}}` syntax to provide sane defaults — recipients can just press Enter to accept them during `_AJAXSEEK`.
 
 ---
 
