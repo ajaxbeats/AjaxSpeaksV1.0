@@ -599,6 +599,14 @@ cp -r ~/AjaxSpeaks\ 1.0/backup/ajaxspeaks-backup-<date>/* ~/AjaxSpeaks\ 1.0/
 
 ---
 
+## ⭐ Support the Project
+
+If AjaxSpeaks saves you tokens, time, or sanity — a star helps others find it.
+
+**[⭐ Star on GitHub](https://github.com/ajaxbeats/AjaxSpeaksV1.0)**
+
+---
+
 ## 📄 License
 
 **MIT License**
