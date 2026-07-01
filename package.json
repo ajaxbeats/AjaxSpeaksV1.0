@@ -18,7 +18,8 @@
     "rules/",
     "README.md",
     "SKILL.md",
-    "demo.gif"
+    "demo.gif",
+    "benchmark.gif"
   ],
   "keywords": [
     "ai",

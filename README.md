@@ -51,6 +51,20 @@ Every character earns its place.
 
 No servers. No MCP. No agent required. Just a `.mem` file and a paste.
 
+### Real benchmark
+
+![AjaxSpeaks Benchmark](benchmark.gif)
+
+Tested on a 135-file Android TV app (`.kt` + `.xml` + `.gradle`):
+
+| | Words | Est. Tokens |
+|---|---|---|
+| Raw source files | 80,885 | ~105,150 |
+| AjaxSpeaks `.mem` | 1,523 | ~1,979 |
+| **Compression** | | **98.1% · 53× fewer tokens** |
+
+Run it yourself: `cd your-project && _AJAXREADS --dry-run | wc -w`
+
 ### Why not alternatives?
 
 Most context tools require an MCP server, a running agent, or an internet connection.  
