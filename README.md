@@ -127,6 +127,18 @@ Or double-click `install-ajaxspeaks.bat` in File Explorer.
 > your AI tools — so the AI knows them too. (Run this in your terminal,
 > not inside an AI chat.)
 
+### Claude Code Skill (optional)
+
+If you use Claude Code, you can install AjaxSpeaks as a native skill so natural language triggers the commands automatically — say "load my project context" and `_AJAXLOADS` runs without typing the command name.
+
+```bash
+# Copy the skill file into Claude Code's skills directory
+mkdir -p ~/.claude/skills/ajaxspeaks
+cp "$(npm root -g)/ajaxspeaks/SKILL.md" ~/.claude/skills/ajaxspeaks/SKILL.md
+```
+
+Once installed, phrases like "scan my project", "load memory", or "log this session" will automatically trigger the right `_AJAX*` command.
+
 ---
 
 ## 🎤 Voice-Friendly Commands
