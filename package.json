@@ -1,6 +1,6 @@
 {
   "name": "ajaxspeaks",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "96% token compression for AI tools. Distills your project into .mem files — works with Claude, Cline, Cursor, Copilot, Continue.",
   "type": "module",
   "bin": {
